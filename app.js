@@ -1,4 +1,4 @@
-const STORAGE_KEY = "funkos-db-progress-v1";
+const STORAGE_KEY = "funkos-db-progress-v2";
 const REMOTE_BASE_URL = "https://www.listacompletade.com";
 
 let allFunkos = [];
@@ -8,6 +8,7 @@ const totalCountEl = document.getElementById("totalCount");
 const ownedCountEl = document.getElementById("ownedCount");
 const missingCountEl = document.getElementById("missingCount");
 const boxedCountEl = document.getElementById("boxedCount");
+const wantedCountEl = document.getElementById("wantedCount");
 
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
@@ -52,6 +53,7 @@ function mergeFunko(funko) {
     ...funko,
     tengo: progress.tengo ?? funko.tengo ?? false,
     caja: progress.caja ?? funko.caja ?? false,
+    deseado: progress.deseado ?? funko.deseado ?? false,
     estado: progress.estado ?? funko.estado ?? "",
     prioridad: progress.prioridad ?? funko.prioridad ?? "",
     notas: progress.notas ?? funko.notas ?? ""
@@ -63,6 +65,7 @@ function updateSummary() {
   ownedCountEl.textContent = allFunkos.filter(f => mergeFunko(f).tengo).length;
   missingCountEl.textContent = allFunkos.filter(f => !mergeFunko(f).tengo).length;
   boxedCountEl.textContent = allFunkos.filter(f => mergeFunko(f).caja).length;
+  wantedCountEl.textContent = allFunkos.filter(f => mergeFunko(f).deseado).length;
 }
 
 function populateSagaFilter(items) {
@@ -104,7 +107,8 @@ function getFilteredItems() {
       const matchesStatus =
         status === "all" ||
         (status === "owned" && item.tengo) ||
-        (status === "missing" && !item.tengo);
+        (status === "missing" && !item.tengo) ||
+        (status === "wanted" && item.deseado);
 
       const matchesBox =
         box === "all" ||
@@ -175,6 +179,22 @@ function getImageUrl(url) {
   }
 }
 
+function updateBadges(clone, item) {
+  const ownedBadge = clone.querySelector(".status-owned");
+  const missingBadge = clone.querySelector(".status-missing");
+  const wantedBadge = clone.querySelector(".status-wanted");
+
+  if (item.tengo) {
+    ownedBadge.classList.remove("hidden");
+  } else {
+    missingBadge.classList.remove("hidden");
+  }
+
+  if (item.deseado) {
+    wantedBadge.classList.remove("hidden");
+  }
+}
+
 function render() {
   const items = getFilteredItems();
   updateSummary();
@@ -202,6 +222,7 @@ function render() {
 
     const ownedCheckbox = clone.querySelector(".toggle-owned");
     const boxedCheckbox = clone.querySelector(".toggle-boxed");
+    const wantedCheckbox = clone.querySelector(".toggle-wanted");
 
     const stateInput = clone.querySelector(".input-state");
     const priorityInput = clone.querySelector(".input-priority");
@@ -228,6 +249,8 @@ function render() {
 
     ownedCheckbox.checked = !!item.tengo;
     boxedCheckbox.checked = !!item.caja;
+    wantedCheckbox.checked = !!item.deseado;
+
     stateInput.value = item.estado || "";
     priorityInput.value = item.prioridad || "";
     notesInput.value = item.notas || "";
@@ -235,6 +258,8 @@ function render() {
     setLink(amazonLink, item.amazon);
     setLink(ebayLink, item.ebay);
     setLink(aliLink, item.aliexpress);
+
+    updateBadges(clone, item);
 
     ownedCheckbox.addEventListener("change", () => {
       const key = getFunkoKey(item);
@@ -251,6 +276,16 @@ function render() {
       userProgress[key] = {
         ...userProgress[key],
         caja: boxedCheckbox.checked
+      };
+      saveProgress();
+      render();
+    });
+
+    wantedCheckbox.addEventListener("change", () => {
+      const key = getFunkoKey(item);
+      userProgress[key] = {
+        ...userProgress[key],
+        deseado: wantedCheckbox.checked
       };
       saveProgress();
       render();
@@ -292,7 +327,7 @@ function exportProgress() {
   const blob = new Blob([JSON.stringify(merged, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "mi-coleccion-funkos.json";
+  a.download = "funkos.json";
   a.click();
 }
 

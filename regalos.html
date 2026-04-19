@@ -3,22 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Funkos que me faltan</title>
+  <title>Colección Funko Dragon Ball</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div>
-      <h1>Funkos de Dragon Ball que me faltan</h1>
-      <p>Lista para regalos 😎</p>
+      <h1>Colección Funko Dragon Ball</h1>
+      <p>Lista pública para ver qué tengo, qué me falta y qué deseo más 😎</p>
     </div>
   </header>
 
   <main class="container">
     <section class="summary">
       <div class="card stat">
-        <span>Total pendientes</span>
+        <span>Total</span>
+        <strong id="totalCount">0</strong>
+      </div>
+      <div class="card stat">
+        <span>Tengo</span>
+        <strong id="ownedCount">0</strong>
+      </div>
+      <div class="card stat">
+        <span>Me faltan</span>
         <strong id="missingCount">0</strong>
+      </div>
+      <div class="card stat">
+        <span>Deseados</span>
+        <strong id="wantedCount">0</strong>
       </div>
     </section>
 
@@ -26,6 +38,16 @@
       <div class="filter-group">
         <label for="searchInput">Buscar</label>
         <input type="text" id="searchInput" placeholder="Goku, Vegeta, Majin Buu..." />
+      </div>
+
+      <div class="filter-group">
+        <label for="statusFilter">Estado</label>
+        <select id="statusFilter">
+          <option value="all">Todos</option>
+          <option value="missing">Me faltan</option>
+          <option value="owned">Los tengo</option>
+          <option value="wanted">Deseados</option>
+        </select>
       </div>
 
       <div class="filter-group">
@@ -51,6 +73,12 @@
           <span class="funko-number"></span>
         </div>
 
+        <div class="status-badges">
+          <span class="status-pill status-owned hidden">Tengo</span>
+          <span class="status-pill status-missing hidden">Me falta</span>
+          <span class="status-pill status-wanted hidden">Deseado</span>
+        </div>
+
         <p class="funko-saga"></p>
 
         <div class="funko-meta">
@@ -59,7 +87,11 @@
           <span class="meta-line"></span>
         </div>
 
-        <p class="gift-note">Este todavía no lo tengo.</p>
+        <div class="gift-note-wrap">
+          <p class="gift-note gift-note-missing hidden">Este todavía no lo tengo.</p>
+          <p class="gift-note gift-note-owned hidden">Este ya lo tengo en la colección.</p>
+          <p class="gift-note gift-note-wanted hidden">Este está especialmente deseado.</p>
+        </div>
 
         <div class="funko-links">
           <a class="link-amazon" target="_blank" rel="noopener noreferrer">Amazon</a>

@@ -2,8 +2,13 @@ const REMOTE_BASE_URL = "https://www.listacompletade.com";
 
 let allFunkos = [];
 
+const totalCountEl = document.getElementById("totalCount");
+const ownedCountEl = document.getElementById("ownedCount");
 const missingCountEl = document.getElementById("missingCount");
+const wantedCountEl = document.getElementById("wantedCount");
+
 const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
 const sagaFilter = document.getElementById("sagaFilter");
 const funkoGrid = document.getElementById("funkoGrid");
 const template = document.getElementById("giftCardTemplate");
@@ -38,8 +43,7 @@ function getImageUrl(url) {
   const cleanUrl = String(url).trim();
 
   try {
-    const fullUrl = new URL(cleanUrl, REMOTE_BASE_URL).href;
-    return fullUrl;
+    return new URL(cleanUrl, REMOTE_BASE_URL).href;
   } catch (error) {
     return getFallbackImage();
   }
@@ -60,17 +64,22 @@ function populateSagaFilter(items) {
   });
 }
 
+function updateSummary() {
+  totalCountEl.textContent = allFunkos.length;
+  ownedCountEl.textContent = allFunkos.filter(item => !!item.tengo).length;
+  missingCountEl.textContent = allFunkos.filter(item => !item.tengo).length;
+  wantedCountEl.textContent = allFunkos.filter(item => !!item.deseado).length;
+}
+
 function getFilteredItems() {
   const search = searchInput.value.trim().toLowerCase();
   const saga = sagaFilter.value;
+  const status = statusFilter.value;
 
   return allFunkos.filter(item => {
     const nombre = (item.nombre || "").toLowerCase();
     const sagaTexto = (item.saga || "").toLowerCase();
     const numero = String(item.numero || "").toLowerCase();
-    const tengo = !!item.tengo;
-
-    if (tengo) return false;
 
     const matchesSearch =
       !search ||
@@ -81,13 +90,42 @@ function getFilteredItems() {
     const matchesSaga =
       saga === "all" || (item.saga || "") === saga;
 
-    return matchesSearch && matchesSaga;
+    const matchesStatus =
+      status === "all" ||
+      (status === "missing" && !item.tengo) ||
+      (status === "owned" && item.tengo) ||
+      (status === "wanted" && item.deseado);
+
+    return matchesSearch && matchesSaga && matchesStatus;
   });
+}
+
+function updateBadges(clone, item) {
+  const ownedBadge = clone.querySelector(".status-owned");
+  const missingBadge = clone.querySelector(".status-missing");
+  const wantedBadge = clone.querySelector(".status-wanted");
+
+  const missingNote = clone.querySelector(".gift-note-missing");
+  const ownedNote = clone.querySelector(".gift-note-owned");
+  const wantedNote = clone.querySelector(".gift-note-wanted");
+
+  if (item.tengo) {
+    ownedBadge.classList.remove("hidden");
+    ownedNote.classList.remove("hidden");
+  } else {
+    missingBadge.classList.remove("hidden");
+    missingNote.classList.remove("hidden");
+  }
+
+  if (item.deseado) {
+    wantedBadge.classList.remove("hidden");
+    wantedNote.classList.remove("hidden");
+  }
 }
 
 function render() {
   const items = getFilteredItems();
-  missingCountEl.textContent = items.length;
+  updateSummary();
 
   funkoGrid.innerHTML = "";
 
@@ -133,6 +171,8 @@ function render() {
     setLink(ebayLink, item.ebay);
     setLink(aliLink, item.aliexpress);
 
+    updateBadges(clone, item);
+
     funkoGrid.appendChild(clone);
   });
 }
@@ -164,5 +204,6 @@ async function init() {
 
 searchInput.addEventListener("input", render);
 sagaFilter.addEventListener("change", render);
+statusFilter.addEventListener("change", render);
 
 init();

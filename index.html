@@ -10,7 +10,7 @@
   <header class="topbar">
     <div>
       <h1>Mi colección Funko Dragon Ball</h1>
-      <p>Control de colección, caja, faltantes y enlaces de compra</p>
+      <p>Panel admin para controlar colección, caja, deseados y enlaces de compra</p>
     </div>
   </header>
 
@@ -32,6 +32,10 @@
         <span>Con caja</span>
         <strong id="boxedCount">0</strong>
       </div>
+      <div class="card stat">
+        <span>Deseados</span>
+        <strong id="wantedCount">0</strong>
+      </div>
     </section>
 
     <section class="filters card">
@@ -46,6 +50,7 @@
           <option value="all">Todos</option>
           <option value="owned">Los tengo</option>
           <option value="missing">Me faltan</option>
+          <option value="wanted">Deseados</option>
         </select>
       </div>
 
@@ -86,6 +91,12 @@
           <span class="funko-number"></span>
         </div>
 
+        <div class="status-badges">
+          <span class="status-pill status-owned hidden">Tengo</span>
+          <span class="status-pill status-missing hidden">Me falta</span>
+          <span class="status-pill status-wanted hidden">Deseado</span>
+        </div>
+
         <p class="funko-saga"></p>
 
         <div class="funko-meta">
@@ -102,6 +113,10 @@
           <label>
             <input type="checkbox" class="toggle-boxed" />
             Tiene caja
+          </label>
+          <label>
+            <input type="checkbox" class="toggle-wanted" />
+            Deseado
           </label>
         </div>
 

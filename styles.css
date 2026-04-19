@@ -233,3 +233,65 @@ body {
   border-radius: 14px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.06);
 }
+.gift-note {
+  font-weight: bold;
+  color: #2563eb;
+  margin: 12px 0 16px;
+}
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-owned {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-missing {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-wanted {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.gift-note-wrap {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 16px;
+}
+
+.gift-note {
+  font-weight: bold;
+  margin: 0;
+}
+
+.gift-note-missing {
+  color: #2563eb;
+}
+
+.gift-note-owned {
+  color: #059669;
+}
+
+.gift-note-wanted {
+  color: #b45309;
+}
+
+.hidden {
+  display: none !important;
+}
