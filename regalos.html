@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Funkos que me faltan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Funkos de Dragon Ball que me faltan</h1>
+      <p>Lista para regalos 😎</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="summary">
+      <div class="card stat">
+        <span>Total pendientes</span>
+        <strong id="missingCount">0</strong>
+      </div>
+    </section>
+
+    <section class="filters card">
+      <div class="filter-group">
+        <label for="searchInput">Buscar</label>
+        <input type="text" id="searchInput" placeholder="Goku, Vegeta, Majin Buu..." />
+      </div>
+
+      <div class="filter-group">
+        <label for="sagaFilter">Saga</label>
+        <select id="sagaFilter">
+          <option value="all">Todas</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="funkoGrid" class="grid"></section>
+  </main>
+
+  <template id="giftCardTemplate">
+    <article class="card funko-card">
+      <div class="funko-image-wrap">
+        <img class="funko-image" src="" alt="" />
+      </div>
+
+      <div class="funko-content">
+        <div class="funko-head">
+          <h3 class="funko-name"></h3>
+          <span class="funko-number"></span>
+        </div>
+
+        <p class="funko-saga"></p>
+
+        <div class="funko-meta">
+          <span class="meta-year"></span>
+          <span class="meta-print"></span>
+          <span class="meta-line"></span>
+        </div>
+
+        <p class="gift-note">Este todavía no lo tengo.</p>
+
+        <div class="funko-links">
+          <a class="link-amazon" target="_blank" rel="noopener noreferrer">Amazon</a>
+          <a class="link-ebay" target="_blank" rel="noopener noreferrer">eBay</a>
+          <a class="link-aliexpress" target="_blank" rel="noopener noreferrer">AliExpress</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="regalos.js"></script>
+</body>
+</html>
